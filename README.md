@@ -7,6 +7,6 @@ Sorting algorithm visualizer made with react, includes sounds and multiple sorti
 run npm install(you need to have node installed)\
 cd sorting-visualizer\
 npm start\
-have fun! \
+have fun!
 
 
