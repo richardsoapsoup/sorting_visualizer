@@ -4,8 +4,8 @@ Sorting algorithm visualizer made with react, includes sounds and multiple sorti
 
 ## Running the code
 
-run npm install(you need to have node installed)\
 cd sorting-visualizer\
+run npm install(you need to have node installed)\
 npm start\
 have fun!
 
