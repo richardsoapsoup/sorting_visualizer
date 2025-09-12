@@ -1,3 +1,4 @@
+// SortingVisualizer.js
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import BarChart from "./BarChart";
 import Controls from "./Controls";
@@ -19,12 +20,12 @@ const algorithms = {
   "Radix Sort": radixSort,
 };
 
-const SortingVisualizer = forwardRef((props, ref) => {
+// Receba createPortal e portalTarget como props
+const SortingVisualizer = forwardRef(({ createPortal, portalTarget }, ref) => {
   const [array, setArray] = useState([]);
   const [isSorting, setIsSorting] = useState(false);
   const [selectedAlgo, setSelectedAlgo] = useState("Bubble Sort");
 
- 
   const isSorted = (arr) => {
     for (let i = 0; i < arr.length - 1; i++) {
       if (arr[i] > arr[i + 1]) return false;
@@ -43,7 +44,7 @@ const SortingVisualizer = forwardRef((props, ref) => {
 
   const startSort = async () => {
     if (array.length === 0) return;
-    if (isSorted(array)) return; 
+    if (isSorted(array)) return;
 
     const algoFunc = algorithms[selectedAlgo];
     if (!algoFunc) return;
@@ -72,7 +73,10 @@ const SortingVisualizer = forwardRef((props, ref) => {
         selectedAlgo={selectedAlgo}
         setSelectedAlgo={setSelectedAlgo}
         algorithms={algorithms}
-        isArraySorted={sorted} 
+        isArraySorted={sorted}
+        // Passe as props do portal para o Controls
+        createPortal={createPortal}
+        portalTarget={portalTarget}
       />
     </div>
   );

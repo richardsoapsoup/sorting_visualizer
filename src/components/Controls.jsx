@@ -1,4 +1,5 @@
-import { useState } from "react";
+// Controls.jsx
+import React, { useState, useRef, useEffect, useCallback } from "react";
 
 export default function Controls({
   onGenerate,
@@ -9,16 +10,34 @@ export default function Controls({
   algorithms,
 }) {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null); // Ref para o container do dropdown (o div "relative w-52")
 
   const handleSelect = (name) => {
     setSelectedAlgo(name);
-    setOpen(false);
+    setOpen(false); // Fecha o dropdown ao selecionar um item
   };
+
+  // useCallback para handleClickOutside para evitar recriação desnecessária
+  const handleClickOutside = useCallback((event) => {
+    // Verifica se o dropdown está aberto e se o clique foi FORA do container do dropdown
+    if (open && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpen(false);
+    }
+  }, [open]); // Depende apenas de 'open'
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    // Função de cleanup para remover o listener quando o componente desmontar ou 'open' mudar
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]); // A dependência é handleClickOutside, que por sua vez depende de 'open'
+
 
   return (
     <div className="mt-6 flex flex-wrap items-center justify-center gap-4 bg-gray-800 px-5 py-4 rounded-2xl shadow-xl">
-    
-      <div className="relative w-52">
+      {/* Este div precisa ser relative para que o ul (absolute) se posicione em relação a ele */}
+      <div className="relative w-52" ref={dropdownRef}>
         <button
           onClick={() => setOpen(!open)}
           disabled={disabled}
@@ -43,7 +62,13 @@ export default function Controls({
         </button>
 
         {open && (
-          <ul className="absolute mt-1 w-full max-h-64 overflow-y-auto bg-gray-700 rounded-xl shadow-lg z-10">
+          <ul
+            className="absolute left-0 w-full max-h-64 overflow-y-auto bg-gray-700 rounded-xl shadow-lg"
+            style={{
+              top: "100%", // Abre abaixo do botão
+              zIndex: 1000, // Valor alto para garantir que fique por cima
+            }}
+          >
             {Object.keys(algorithms).map((name) => (
               <li
                 key={name}
@@ -57,7 +82,6 @@ export default function Controls({
         )}
       </div>
 
-      
       <button
         onClick={onGenerate}
         disabled={disabled}
@@ -66,7 +90,6 @@ export default function Controls({
         Gerar Lista
       </button>
 
-      
       <button
         onClick={onSort}
         disabled={disabled}
