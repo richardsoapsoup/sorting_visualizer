@@ -1,4 +1,4 @@
-// App.js
+
 import { useState, useRef } from "react";
 import SortingVisualizer from "./components/SortingVisualizer";
 
@@ -54,28 +54,21 @@ export default function App() {
         </button>
       </div>
 
-      {/*
-        Este é o container principal que envolve todos os visualizadores.
-        Precisamos garantir que ele NÃO crie um contexto de empilhamento
-        e que permita overflow.
-      */}
+      
       <div className="flex flex-wrap justify-center gap-6 w-full max-w-7xl px-4" style={{ overflow: 'visible', position: 'static' }}>
         {visualizers.map((v) => (
           <div
             key={v.id}
-            // Removido `relative` e `style` de min/max/flexGrow para simplificar
+            
             className={`transition-all duration-300`}
-            // Adicionado style diretamente, garantir overflow e não ter position: relative que cria contexto
+            
             style={{ minWidth: "250px", maxWidth: "400px", flexGrow: 0, overflow: "visible", position: 'static' }}
           >
-            {/*
-              O botão de remover precisa de um pai relative.
-              Este div wrapper é o único `relative` agora.
-            */}
+           
             <div className="relative">
               <button
                 onClick={() => removeVisualizer(v.id)}
-                // Ajustado top/right e z-index para garantir que fique acima de tudo
+                
                 className="absolute -top-2 -right-2 w-8 h-8 flex justify-center items-center bg-red-600 rounded-full hover:bg-red-700 transition-all shadow-md text-lg z-[101]" // z-index alto para o botão de remover
                 title="Remover visualizador"
               >
